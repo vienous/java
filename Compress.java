@@ -143,7 +143,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
       
     // main测试   
     // compressPic(大图片路径,生成小图片路径,大图片文件名,生成小图片文名,生成小图片宽度,生成小图片高度,是否等比缩放(默认为true))  
-    public static void main(String[] arg) {   
+    public static void main(String[] arg){   
     	String intputDir = "e:\\img_resource\\";
     	String outputDir = "e:\\img_compress\\";
     	File file = new File(intputDir);     
@@ -152,7 +152,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
         int cCount = 0;
         int uCount = 0; 
         for (int i = 0; i < array.length; i++) {   
-        	String imgName = array[i].toString().split("img_resource")[1].substring(1);       	
+        	String imgName = array[0].toString().split("\\\\")[2];       	
         	Compress mypic = new Compress();          	
         	long imgSzie = mypic.getPicSize(array[i].toString())/1024;
         	System.out.println("序号"+(i+1)+":输入的图片"+imgName+"大小：" + mypic.getPicSize(array[i].toString())/1024 + "KB");
@@ -172,9 +172,11 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
                 System.out.println("输出的图片大小：" + mypic.getPicSize(outputDir+imgName)/1024 + "KB"); 
         	}else{
         		//小于100K,拷贝过去
+        		FileInputStream input =null;
+        		FileOutputStream output =null;
         		try{
-        			FileInputStream input=new FileInputStream(array[i]);//可替换为任何路径何和文件名
-        			FileOutputStream output=new FileOutputStream(outputDir+imgName);//可替换为任何路径何和文件名
+        			input=new FileInputStream(array[i]);//可替换为任何路径何和文件名
+        			output=new FileOutputStream(outputDir+imgName);//可替换为任何路径何和文件名
         			int in=input.read();
         			while(in!=-1){
 	        			output.write(in);
@@ -184,6 +186,15 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
         			System.out.println("图片"+imgName+"小于100K,未压缩");
         		}catch (IOException e){
         			System.out.println(e.toString());
+        		}finally{
+        			try {
+						input.close();
+						output.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+        			
         		}
         	}
               
